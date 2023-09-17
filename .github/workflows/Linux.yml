@@ -17,6 +17,25 @@ jobs:
         run: |
           echo 'username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}' >> config.yml
+      - name: gengxing
+        run: |
+           sudo apt-get update
+      - name: 检查空间使用情况
+        run: |
+          echo "Free space:"
+          df -h
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+           android: true
+           dotnet: true
+           haskell: true
+           large-packages: true
+           docker-images: true
+           swap-storage: true
 
       - name: 增加可用空间 (删除dotnet, android、haskell、CodeQL)
         shell: bash
