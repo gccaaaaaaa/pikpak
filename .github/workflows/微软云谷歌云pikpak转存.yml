@@ -1,4 +1,4 @@
-name: linux upload gd od
+name: 微软云谷歌云pikpak转存
 on:
   repository_dispatch:
   workflow_dispatch:
