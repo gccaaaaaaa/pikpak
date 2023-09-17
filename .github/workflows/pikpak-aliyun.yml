@@ -1,0 +1,55 @@
+name: PikPak加密转存Aliyun
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: '下载路径'
+        required: true
+        default: 'MyTelegram'
+
+jobs:
+  Alist:
+    runs-on: ubuntu-latest
+    container: ubuntu
+    services:
+      alist-encrypt:
+        image: ykxvk8yl5l/alist-encrypt:dev
+        env:
+          DAV_PASSWORD: "${{ secrets.ENCRPT_PASSWORD1 }}"
+          DAV_ENCNAME: true
+          DAV_ENABLE_OTHER: false
+        ports:
+        - 5344:5344
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: install prerequisites
+        run: |
+          python -m pip install --upgrade pip wheel
+          pip install install requests
+      - name: 'Create Config'
+        run: |
+          echo 'username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}' >> config.yml
+      - name: 'Download file from PikPak'
+        run: |
+          chmod a+x pikpakcli
+          ./pikpakcli download -p ${{ github.event.inputs.path }}
+      - name: Upload
+        id: upload
+        #if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
+        run: |
+          python alist.py --folder="${{ github.event.inputs.path }}"  --path="${{ steps.github.event.inputs.path }}" --storage_body="${{ secrets.ALIST_STORAGE_BODY }}/encrypt_folder"
+        
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v1.2.3
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 0
+
