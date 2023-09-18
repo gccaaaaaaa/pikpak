@@ -1,4 +1,4 @@
-name: linux upload gd od
+name: unzip
 on:
   repository_dispatch:
   workflow_dispatch:
