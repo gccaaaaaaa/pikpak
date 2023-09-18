@@ -30,12 +30,12 @@ jobs:
 
         # all of these default to true, but feel free to set to
         # "false" if necessary for your workflow
-           tool-cache: false
+           tool-cache: true
            android: true
            dotnet: true
            haskell: true
            large-packages: true
-           docker-images: true
+           docker-images: false
            swap-storage: true
       - name: 检查空间使用情况
         run: |
