@@ -1,0 +1,82 @@
+name: linux upload gd od
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      path:
+        description: '下载路径'
+        required: true
+        default: 'MyTelegram'
+
+jobs:
+  Onedriver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'Create Config'
+        run: |
+          echo 'username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}' >> config.yml
+      - name: gengxing
+        run: |
+           sudo apt-get update
+      - name: 检查空间使用情况
+        run: |
+          echo "Free space:"
+          df -h
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+           tool-cache: true
+           android: true
+           dotnet: true
+           haskell: true
+           large-packages: true
+           docker-images: false
+           swap-storage: true
+      - name: 检查空间使用情况
+        run: |
+          echo "Free space:"
+          df -h
+      - name: 增加可用空间 (删除dotnet, android、haskell、CodeQL)
+        shell: bash
+        run: |
+         sudo rm -rf /usr/share/dotnet
+         sudo rm -rf /usr/local/lib/android
+         sudo rm -rf /opt/ghc
+         sudo rm -rf /opt/hostedtoolcache/CodeQL
+      - name: 检查空间使用情况
+        run: |
+         echo "Free space:"
+         df -h
+      - name: 'Download file from PikPak'
+        run: |
+          chmod a+x pikpakcli
+          ./pikpakcli download -p ${{ github.event.inputs.path }}
+      - name: Extract 7zip file
+        run: |
+          7z x ${{ github.event.inputs.path }} -o. -r
+        working-directory: ${{ github.workspace }}
+      - name: Delete downloaded 7zip file
+        run: |
+          rm ${{ github.event.inputs.path }}
+        working-directory: ${{ github.workspace }}
+      - name: 上传gdcloud
+        uses: wei/rclone@v1
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        with:
+          args: copy ${{ github.event.inputs.path }} gdcloud:${{ secrets.cloudname }}
+      - name: 上传onedrive
+        uses: wei/rclone@v1
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        with:
+          args: copy ${{ github.event.inputs.path }} onedrive:${{ github.event.inputs.path }}
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@v1.2.3
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 0
