@@ -35,7 +35,7 @@ jobs:
            dotnet: true
            haskell: true
            large-packages: true
-           docker-images: true
+           docker-images: false
            swap-storage: true
 
       - name: 增加可用空间 (删除dotnet, android、haskell、CodeQL)
