@@ -1,12 +1,12 @@
-name: unzip
+name: unzip and upload
 on:
   repository_dispatch:
-  workflow_dispatch:
-    inputs:
-      path:
-        description: '下载路径'
-        required: true
-        default: 'MyTelegram'
+    workflow_dispatch:
+      inputs:
+        path:
+          description: '下载路径'
+          required: true
+          default: 'MyTelegram'
 
 jobs:
   Onedriver:
@@ -38,37 +38,25 @@ jobs:
         run: |
           echo "Free space:"
           df -h
-      - name: 增加可用空间 (删除dotnet, android、haskell、CodeQL)
-        shell: bash
-        run: |
-         sudo rm -rf /usr/share/dotnet
-         sudo rm -rf /usr/local/lib/android
-         sudo rm -rf /opt/ghc
-         sudo rm -rf /opt/hostedtoolcache/CodeQL
-      - name: 检查空间使用情况
-        run: |
-         echo "Free space:"
-         df -h
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
           ./pikpakcli download -p ${{ github.event.inputs.path }}
-      - name: Extract and cleanup 7zip file
+      - name: Extract 7zip file
         run: |
           7z x ${{ github.event.inputs.path }} -o. -r
-        working-directory: ${{ github.workspace }}
       - name: 上传gdcloud
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.path }} gdcloud:${{ secrets.cloudname }}
+          args: copy ${{ github.event.inputs.path | replace: ".7z", "" }} gdcloud:${{ secrets.cloudname }}
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.path }} onedrive:${{ github.event.inputs.path }}
+          args: copy ${{ github.event.inputs.path | replace: ".7z", "" }} onedrive:${{ github.event.inputs.path | replace: ".7z", "" }}
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
         with:
