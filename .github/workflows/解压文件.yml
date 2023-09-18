@@ -51,16 +51,13 @@ jobs:
          df -h
       - name: 'Download file from PikPak'
         run: |
-          chmod a+x pikpakcli
-          ./pikpakcli download -p ${{ github.event.inputs.path }} -o ${{ github.workspace }}
+         chmod a+x pikpakcli
+         ./pikpakcli download -p ${{ github.event.inputs.path }} -o ${{ github.workspace }}
       - name: Extract 7zip file
         run: |
-          7z x ${{ github.workspace }} -o. -r
+         7z x ${{ github.workspace }}/*.7z -o ${{ github.workspace }}
         working-directory: ${{ github.workspace }}
-      - name: Delete downloaded 7zip file
-        run: |
-          rm ${{ github.event.inputs.path }}
-        working-directory: ${{ github.workspace }}
+
       - name: 上传gdcloud
         uses: wei/rclone@v1
         env:
