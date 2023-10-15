@@ -65,7 +65,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.path }} cryptgoogle:${{ secrets.cloudname }}/pikpak
+          args: copy ${{ github.event.inputs.path }} cryptgoogle:${{ secrets.cloudname }}
 
       - name: 上传onedrive
         uses: wei/rclone@v1
