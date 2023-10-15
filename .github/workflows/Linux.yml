@@ -57,14 +57,7 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
-          ./pikpakcli download -p ${{ github.event.inputs.path }}
-
-      - name: 上传gdcloud
-        uses: wei/rclone@v1
-        env:
-          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
-        with:
-          args: copy ${{ github.event.inputs.path }} cryptgoogle:${{ secrets.cloudname }}/pikpak          
+          ./pikpakcli download -p ${{ github.event.inputs.path }}        
 
 
       - name: 上传onedrive
