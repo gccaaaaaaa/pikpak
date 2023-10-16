@@ -57,7 +57,7 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
-          ./pikpakcli download -c 1 -p ${{ github.event.inputs.path }}        
+          ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }}        
 
 
       - name: 上传onedrive
