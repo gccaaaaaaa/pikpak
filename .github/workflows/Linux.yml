@@ -6,7 +6,7 @@ on:
       path:
         description: '下载路径'
         required: true
-        default: '新建文件夹3'
+        default: '2'
 
 jobs:
   Onedriver:
