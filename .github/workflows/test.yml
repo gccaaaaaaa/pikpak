@@ -82,15 +82,14 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
          chmod a+x pikpakcli
-         ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }}
-        working-directory: ${{ github.event.inputs.directory }}> /dev/null
+         ./pikpakcli download -c 5 -p ${{ github.event.directory.path }} > /dev/null
           
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.directory }} crypt${{ github.event.inputs.directory }} > /dev/null
+          args: copy ${{ github.event.directory.path }} crypt${{ github.event.directory.path }} > /dev/null
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
