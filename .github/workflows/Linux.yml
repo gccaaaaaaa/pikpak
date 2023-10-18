@@ -67,6 +67,11 @@ jobs:
         with:
           args: copy ${{ github.event.inputs.path }} crypt:${{ github.event.inputs.path }}
         
+      - name: 检查空间使用情况
+        run: |
+          echo "Free space:"
+          df -h
+
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
         with:
