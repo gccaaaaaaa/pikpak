@@ -1,6 +1,8 @@
 name: 测试文件
 on:
   repository_dispatch:
+    types:
+      - custom_event_name
   workflow_dispatch:
     inputs:
       path:
@@ -8,9 +10,9 @@ on:
         required: true
         default: '1'
       directory:
-        description: '目标目录'
-        required: true  # 可以根据需要设置为 true 或 false
-        default: '2'
+          description: '目标目录'
+          required: true
+          default: '2'
 
 jobs:
   Onedriver:
@@ -82,14 +84,14 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
          chmod a+x pikpakcli
-         ./pikpakcli download -c 5 -p ${{ github.event.directory.path }} > /dev/null
+         ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }} > /dev/null
           
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.directory.path }} crypt${{ github.event.directory.path }} > /dev/null
+          args: copy ${{ github.event.inputs.directory }} crypt${{ github.event.inputs.directory }} > /dev/null
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
