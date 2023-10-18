@@ -1,4 +1,4 @@
-name: linux upload gd od
+name: 测试文件
 on:
   repository_dispatch:
   workflow_dispatch:
@@ -15,8 +15,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: 'Create Config'
         run: |
-          echo 'username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}' >> config.yml
+          echo 'username: ::add-mask::${{ secrets.USERNAME }}
+          password: ::add-mask::${{ secrets.PASSWORD }}' >> config.yml
       - name: gengxing
         run: |
            sudo apt-get update
@@ -41,13 +41,6 @@ jobs:
         run: |
           echo "Free space:"
           df -h
-      - name: 增加可用空间 (删除dotnet, android、haskell、CodeQL)
-        shell: bash
-        run: |
-         sudo rm -rf /usr/share/dotnet
-         sudo rm -rf /usr/local/lib/android
-         sudo rm -rf /opt/ghc
-         sudo rm -rf /opt/hostedtoolcache/CodeQL
 
       - name: 检查空间使用情况
         run: |
@@ -63,14 +56,14 @@ jobs:
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
-          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+          RCLONE_CONF: ::add-mask::${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.path }} crypt:${{ github.event.inputs.path }}
+          args: copy ::add-mask::${{ github.event.inputs.path }} crypt:::add-mask::${{ github.event.inputs.path }}
 
       - name: Delete actions folder
         run: |
-          rm -rf ${{ github.event.inputs.path }}
-          
+         sudo rm -rf ::add-mask::${{ github.event.inputs.path }}
+
       - name: 检查空间使用情况
         run: |
           echo "Free space:"
