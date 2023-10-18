@@ -58,31 +58,6 @@ jobs:
           chmod a+x pikpakcli
           ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }} > /dev/null
         continue-on-error: true
-        
-      - name: 下载加密程序
-        run: |
-          curl -L -o dist.tar.gz https://github.com/ykxVK8yL5L/alist-encrypt/releases/download/0.0.1/dist.tar.gz
-          tar -xzf dist.tar.gz
-          
-      - name: 加密文件
-        id: encrypt1
-        if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
-        run: |
-           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/downloads/' '${{ github.workspace }}/out/' encName
-           filename=$(ls out | head -n1)
-           extension=$(awk 'BEGIN{srand();}{a[NR]=$0}END{print a[int(rand()*NR)+1]}' suffixes | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-           filename_no_suffix="${filename%.*}"
-           newfilename="$filename_no_suffix"."$extension"
-           if [ "$filename" != "$newfilename" ]; then
-            	mv out/$filename out/$newfilename
-           fi
-           sha1_s=`openssl sha1 out/$newfilename | awk '{ print $2 }'`
-           header="OC-Checksum:sha1:$sha1_s"
-           echo "::set-output name=header::$header"
-           echo "::set-output name=filename::$newfilename"
-           echo "::set-output name=path::out/$newfilename"
-           size=$(ls -l out/$filename | awk '{print $5}' )
-           echo "::set-output name=size::$size"
 
       - name: 上传onedrive
         uses: wei/rclone@v1
@@ -112,30 +87,7 @@ jobs:
          chmod a+x pikpakcli
          ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }} > /dev/null
         continue-on-error: true
-
-      - name: 下载加密程序
-        run: |
-          curl -L -o dist.tar.gz https://github.com/ykxVK8yL5L/alist-encrypt/releases/download/0.0.1/dist.tar.gz
-          tar -xzf dist.tar.gz
-      - name: 加密文件
-        id: encrypt
-        if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
-        run: |
-           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/downloads/' '${{ github.workspace }}/out/' encName
-           filename=$(ls out | head -n1)
-           extension=$(awk 'BEGIN{srand();}{a[NR]=$0}END{print a[int(rand()*NR)+1]}' suffixes | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-           filename_no_suffix="${filename%.*}"
-           newfilename="$filename_no_suffix"."$extension"
-           if [ "$filename" != "$newfilename" ]; then
-            	mv out/$filename out/$newfilename
-           fi
-           sha1_s=`openssl sha1 out/$newfilename | awk '{ print $2 }'`
-           header="OC-Checksum:sha1:$sha1_s"
-           echo "::set-output name=header::$header"
-           echo "::set-output name=filename::$newfilename"
-           echo "::set-output name=path::out/$newfilename"
-           size=$(ls -l out/$filename | awk '{print $5}' )
-           echo "::set-output name=size::$size"
+        
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
