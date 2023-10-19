@@ -114,7 +114,7 @@ jobs:
           curl -L -o dist.tar.gz https://github.com/ykxVK8yL5L/alist-encrypt/releases/download/0.0.1/dist.tar.gz
           tar -xzf dist.tar.gz
       - name: 加密文件
-        id: encrypt
+        id: encrypt1
         if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
         run: |
            ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ github.event.inputs.directory }}/' '${{ github.workspace }}/out/' encName
