@@ -69,6 +69,7 @@ jobs:
         run: |
           curl -L -o dist.tar.gz https://github.com/ykxVK8yL5L/alist-encrypt/releases/download/0.0.1/dist.tar.gz
           tar -xzf dist.tar.gz
+
       - name: 加密文件
         id: encrypt
         if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
@@ -82,12 +83,13 @@ jobs:
            echo "::set-output name=path::out/$filename"
            size=$(ls -l out/$filename | awk '{print $5}' )
            echo "::set-output name=size::$size"
+
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.path }} crypt:${{ github.event.inputs.path }}
+          args: copy ${{ github.event.inputs.path }} onedrive:${{ github.event.inputs.path }}
 
       - name: 检查空间使用情况
         run: |
@@ -114,7 +116,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ github.event.inputs.directory }} crypt:${{ github.event.inputs.directory }}
+          args: copy ${{ github.event.inputs.directory }} onedrive:${{ github.event.inputs.directory }}
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
         with:
