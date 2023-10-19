@@ -88,7 +88,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy ${{ steps.encrypt.outputs.path }}/ onedrive:${{ github.event.inputs.path }}
+          args: copy out/ onedrive:${{ github.event.inputs.path }}
           
       - name: 检查空间使用情况
         run: |
