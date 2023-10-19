@@ -10,7 +10,7 @@ on:
         required: true
         default: '1'
       directory:
-          description: '目标目录'
+          description: '下载路径'
           required: true
           default: '2'
 
@@ -56,7 +56,7 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
-          ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }} > /dev/null
+          ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }}   > /dev/null
 
       - name: 上传onedrive
         uses: wei/rclone@v1
@@ -83,7 +83,7 @@ jobs:
       - name: 'Download file from PikPak1'
         run: |
          chmod a+x pikpakcli
-         ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }}> /dev/null
+         ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }}   > /dev/null
         
       - name: 上传onedrive
         uses: wei/rclone@v1
