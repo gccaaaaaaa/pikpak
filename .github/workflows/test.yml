@@ -10,7 +10,7 @@ on:
         required: true
         default: '1'
       directory:
-          description: '下载路径'
+          description: '下载路径1'
           required: true
           default: '2'
 
