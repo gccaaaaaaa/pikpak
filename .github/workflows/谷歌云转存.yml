@@ -62,7 +62,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak
 
           
       - name: 检查空间使用情况
@@ -107,7 +107,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak1
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
