@@ -1,4 +1,4 @@
-name: 微软云谷歌云pikpak转存
+name: pikpak加密转存
 on:
   repository_dispatch:
     types:
@@ -30,6 +30,19 @@ jobs:
         run: |
           echo "Free space:"
           df -h
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+           tool-cache: true
+           android: true
+           dotnet: true
+           haskell: true
+           large-packages: true
+           docker-images: false
+           swap-storage: true
       - name: 检查空间使用情况
         run: |
           echo "Free space:"
@@ -54,31 +67,35 @@ jobs:
           pip install install requests
       - name: 下载加密程序
         run: |
-          curl -L -o alist-encrypt.zip https://github.com/sdasdasddda/alist/releases/download/1/alist-encrypt.zip
-          unzip alist-encrypt.zip
+          curl -L -o dist.tar.gz https://github.com/sdasdasddda/alist-encrypt/releases/download/0.0.1/dist.tar.gz
+          tar -xzf dist.tar.gz
 
-      - name: 加密文件
+      - name: crypt file
         id: encrypt
         run: |
-           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/3/' '${{ github.workspace }}/out/' encName
-           filename=$(ls out | head -n1)
-           extension=$(awk 'BEGIN{srand();}{a[NR]=$0}END{print a[int(rand()*NR)+1]}' suffixes | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-           filename_no_suffix="${filename%.*}"
-           newfilename="$filename_no_suffix"."$extension"
-           sha1_s=`openssl sha1 out/$newfilename | awk '{ print $2 }'`
-           header="OC-Checksum:sha1:$sha1_s"
-           echo "::set-output name=header::$header"
-           echo "::set-output name=filename::$newfilename"
-           echo "::set-output name=path::out/$newfilename"
-           size=$(ls -l out/$filename | awk '{print $5}' )
-           echo "::set-output name=size::$size"
+           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ github.event.inputs.path }}/' '${{ github.workspace }}/out/' >/dev/null 2>&1 encName
+           filename=$(ls out | head -n1) >/dev/null 2>&1
+           sha1_s=`openssl sha1 out/$filename | awk '{ print $2 }'` >/dev/null 2>&1
+           header="OC-Checksum:sha1:$sha1_s" >/dev/null 2>&1
+           echo "::set-output name=header::$header" >/dev/null 2>&1
+           echo "::set-output name=filename::$filename" >/dev/null 2>&1
+           echo "::set-output name=path::out/$filename" >/dev/null 2>&1
+           size=$(ls -l out/$filename | awk '{print $5}' ) >/dev/null 2>&1
+           echo "::set-output name=size::$size" >/dev/null 2>&1
 
       - name: upload onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:3 >/dev/null 2>&1
+          args: copy out/ onedrive:${{ secrets.OLSECRETARY }} >/dev/null 2>&1
+
+      - name: 上传gd
+        uses: wei/rclone@v1
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        with:
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }} >/dev/null 2>&1
           
       - name: 检查空间使用情况
         run: |
@@ -102,12 +119,12 @@ jobs:
          ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }} >/dev/null 2>&1
       - name: 下载加密程序
         run: |
-          curl -L -o alist-encrypt.zip https://github.com/sdasdasddda/alist/releases/download/1/alist-encrypt.zip
-          unzip alist-encrypt.zip
+          curl -L -o dist.tar.gz https://github.com/sdasdasddda/alist-encrypt/releases/download/0.0.1/dist.tar.gz
+          tar -xzf dist.tar.gz
       - name: 加密文件
         id: encrypt1
         run: |
-           ${{ github.workspace }}/alist-encrypt/alist-encrypt-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ github.event.inputs.directory }}/' '${{ github.workspace }}/out/' >/dev/null 2>&1 encName
+           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ github.event.inputs.directory }}/' '${{ github.workspace }}/out/' >/dev/null 2>&1 encName
            filename=$(ls out | head -n1) >/dev/null 2>&1
            sha1_s=`openssl sha1 out/$filename | awk '{ print $2 }'` >/dev/null 2>&1
            header="OC-Checksum:sha1:$sha1_s" >/dev/null 2>&1
@@ -122,7 +139,14 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:4 >/dev/null 2>&1
+          args: copy out/ onedrive:${{ secrets.OLSECRETARY }} >/dev/null 2>&1
+
+      - name: 上传gd
+        uses: wei/rclone@v1
+        env:
+          RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
+        with:
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }} >/dev/null 2>&1
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
         with:
