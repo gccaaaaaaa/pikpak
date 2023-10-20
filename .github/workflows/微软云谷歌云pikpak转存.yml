@@ -73,8 +73,8 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo rm -rf ${{ github.event.inputs.path }} >/dev/null 2>&1
-         sudo rm -rf out/ >/dev/null 2>&1
+         sudo rm -rf ${{ github.event.inputs.path }}
+         sudo rm -rf out/
 
       - name: 检查空间使用情况
         run: |
@@ -107,7 +107,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptonedrive:pikpak >/dev/null 2>&1
+          args: copy out/ cryptonedrive:pikpak1 >/dev/null 2>&1
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
