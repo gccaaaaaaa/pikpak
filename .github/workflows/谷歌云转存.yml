@@ -1,4 +1,4 @@
-name: 微软云谷歌云pikpak转存
+name: 谷歌云pikpak转存
 on:
   repository_dispatch:
     types:
