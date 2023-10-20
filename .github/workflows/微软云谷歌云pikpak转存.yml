@@ -62,7 +62,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptonedrive:pikpak
+          args: copy out/ cryptonedrive:pikpak >/dev/null 2>&1
 
           
       - name: 检查空间使用情况
