@@ -82,7 +82,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:4 >/dev/null 2>&1
+          args: copy out/ onedrive:3 >/dev/null 2>&1
           
       - name: 检查空间使用情况
         run: |
