@@ -59,7 +59,6 @@ jobs:
 
       - name: 加密文件
         id: encrypt
-        if: steps.downloading.outputs.filename != '' && !cancelled() && !failure()
         run: |
            ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/3/' '${{ github.workspace }}/out/' encName
            filename=$(ls out | head -n1)
