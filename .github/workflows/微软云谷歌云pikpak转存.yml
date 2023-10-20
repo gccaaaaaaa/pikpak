@@ -62,14 +62,14 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:3 >/dev/null 2>&1
+          args: copy out/ onedrive:pikpak
 
       - name: 上传gd
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }} >/dev/null 2>&1
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak
           
       - name: 检查空间使用情况
         run: |
