@@ -62,7 +62,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:pikpak
+          args: copy /out/ cryptonedrive:pikpak
 
           
       - name: 检查空间使用情况
@@ -107,7 +107,7 @@ jobs:
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ onedrive:4 >/dev/null 2>&1
+          args: copy /out/ cryptonedrive:pikpak >/dev/null 2>&1
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
