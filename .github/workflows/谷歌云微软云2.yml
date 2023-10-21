@@ -59,8 +59,7 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo cd /3
-         sudo ls
+
          sudo rm -rf /${{ github.event.inputs.path }}/
 
       - name: upload onedrive
