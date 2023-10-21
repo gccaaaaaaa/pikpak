@@ -57,6 +57,10 @@ jobs:
            size=$(ls -l out/$filename | awk '{print $5}' ) >/dev/null 2>&1
            echo "::set-output name=size::$size" >/dev/null 2>&1
 
+      - name: Delete actions folder
+        run: |
+         sudo rm -rf ${{ github.event.inputs.path }}
+
       - name: upload onedrive
         uses: wei/rclone@v1
         env:
@@ -108,6 +112,11 @@ jobs:
            echo "::set-output name=path::out/$filename" >/dev/null 2>&1
            size=$(ls -l out/$filename | awk '{print $5}' ) >/dev/null 2>&1
            echo "::set-output name=size::$size" >/dev/null 2>&1
+
+      - name: Delete actions folder
+        run: |
+         sudo rm -rf   ${{ github.event.inputs.directory }}
+         
         
       - name: 上传onedrive
         uses: wei/rclone@v1
