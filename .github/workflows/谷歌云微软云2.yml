@@ -59,7 +59,7 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo rm -rf ${{ github.event.inputs.path }}
+         sudo rm -rf /${{ github.event.inputs.path }}/
 
       - name: upload onedrive
         uses: wei/rclone@v1
@@ -84,7 +84,7 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo rm -rf ${{ github.event.inputs.path }}
+         sudo rm -rf ${{ github.event.inputs.path }}/
          sudo rm -rf out/
 
       - name: 检查空间使用情况
@@ -115,7 +115,7 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo rm -rf   ${{ github.event.inputs.directory }}
+         sudo rm -rf /${{ github.event.inputs.directory }}/
          
         
       - name: 上传onedrive
