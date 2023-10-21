@@ -8,11 +8,11 @@ on:
       path:
         description: '下载路径'
         required: true
-        default: '3'
+        default: '33'
       directory:
           description: '下载路径1'
           required: true
-          default: '4'
+          default: '44'
 
 jobs:
   pikpak:
@@ -118,23 +118,23 @@ jobs:
 
       - name: Delete actions folder
         run: |
-         sudo rm -rf /${{ github.event.inputs.directory }}/
-         mkdir downloads
-         sudo mv out/ downloads/
+         sudo rm -rf ${{ github.event.inputs.directory }}/
+         mkdir downloadsgg
+         sudo mv out/ downloadsgg/
         
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy downloads/ cryptonedrive:${{ github.event.inputs.directory }} >/dev/null 2>&1
+          args: copy downloadsgg/ cryptonedrive:${{ github.event.inputs.directory }} >/dev/null 2>&1
 
       - name: 上传gd
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy downloads/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/${{ github.event.inputs.directory }} >/dev/null 2>&1
+          args: copy downloadsgg/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/${{ github.event.inputs.directory }} >/dev/null 2>&1
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
