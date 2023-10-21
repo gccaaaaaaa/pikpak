@@ -75,7 +75,7 @@ jobs:
         run: |
          sudo rm -rf ${{ github.event.inputs.path }}/
          mkdir downloads1
-         sudo mv /out/* /downloads1/
+         sudo mv out/ downloads1/
 
       - name: upload onedrive
         uses: wei/rclone@v1
@@ -102,6 +102,7 @@ jobs:
         run: |
          sudo rm -rf ${{ github.event.inputs.path }}
          sudo rm -rf out/
+         sudo rm -rf downloads1
 
       - name: 检查空间使用情况
         run: |
@@ -133,7 +134,7 @@ jobs:
         run: |
          sudo rm -rf  ${{github.event.inputs.directory }}/
          mkdir downloads
-         sudo mv /out/* /downloads/
+         sudo mv out/ downloads/
 
       - name: 上传onedrive
         uses: wei/rclone@v1
