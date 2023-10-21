@@ -8,11 +8,11 @@ on:
       path:
         description: '下载路径'
         required: true
-        default: '1'
+        default: '番号'
       directory:
           description: '下载路径1'
           required: true
-          default: '2'
+          default: '番号1'
 
 jobs:
   pikpak:
