@@ -57,24 +57,25 @@ jobs:
            size=$(ls -l out/$filename | awk '{print $5}' ) >/dev/null 2>&1
            echo "::set-output name=size::$size" >/dev/null 2>&1
 
-      - name: Delete actions folder
+      - name: Delete actions folder1
         run: |
-
-         sudo rm -rf /${{ github.event.inputs.path }}/
+         sudo rm -rf ${{ github.event.inputs.path }}/
+         mkdir downloads1
+         sudo mv /out/* /downloads1/
 
       - name: upload onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptonedrive:pikpak >/dev/null 2>&1
+          args: copy downloads1/ cryptonedrive:pikpak >/dev/null 2>&1
 
       - name: 上传gd
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak >/dev/null 2>&1
+          args: copy downloads1/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak >/dev/null 2>&1
 
           
       - name: 检查空间使用情况
@@ -87,6 +88,7 @@ jobs:
         run: |
          sudo rm -rf ${{ github.event.inputs.path }}/
          sudo rm -rf out/
+         sudo rm -rf downloads1/
 
       - name: 检查空间使用情况
         run: |
@@ -117,21 +119,22 @@ jobs:
       - name: Delete actions folder
         run: |
          sudo rm -rf /${{ github.event.inputs.directory }}/
-         
+         mkdir downloads
+         sudo mv /out/* /downloads/
         
       - name: 上传onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptonedrive:pikpak1 >/dev/null 2>&1
+          args: copy downloads/ cryptonedrive:pikpak1 >/dev/null 2>&1
 
       - name: 上传gd
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak1 >/dev/null 2>&1
+          args: copy downloads/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/pikpak1 >/dev/null 2>&1
 
       - name: Delete workflow runs
         uses: Mattraks/delete-workflow-runs@v1.2.3
