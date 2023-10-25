@@ -43,7 +43,7 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
-          ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }}
+          ./pikpakcli download -c 10 -p ${{ github.event.inputs.path }}
 
       - name: install Python3.9
         uses: actions/setup-python@v2
@@ -109,7 +109,7 @@ jobs:
       - name: 'Download file from PikPak1'
         run: |
          chmod a+x pikpakcli
-         ./pikpakcli download -c 5 -p ${{ github.event.inputs.directory }}
+         ./pikpakcli download -c 10 -p ${{ github.event.inputs.directory }}
       - name: 下载加密程序
         run: |
           curl -L -o dist.tar.gz https://github.com/sdasdasddda/alist-encrypt/releases/download/0.0.1/dist.tar.gz
