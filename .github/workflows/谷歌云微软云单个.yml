@@ -5,7 +5,7 @@ on:
       path:
         description: '下载路径'
         required: true
-        default: '番号'
+        default: '二零二三年年十月二十五日三'
 
 jobs:
   pikpak:
