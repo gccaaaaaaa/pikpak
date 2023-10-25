@@ -48,7 +48,7 @@ jobs:
           args: --upload-file ${{ steps.downloading.outputs.path }} http://alist:5344/encrypt_folder/${{ steps.downloading.outputs.filename }}
         
       - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@v1.2.3
+        uses: Mattraks/delete-workflow-runs@v2
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
