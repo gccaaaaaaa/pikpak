@@ -1,6 +1,7 @@
 name: 删除完成任务
 on:
-    workflow_dispatch:
+  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   del_runs:
