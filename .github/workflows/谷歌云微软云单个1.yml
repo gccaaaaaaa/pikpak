@@ -1,4 +1,4 @@
-name: 谷歌云微软云单个pikpak转存
+name: 谷歌云微软云单个pikpak转存1
 on:
   workflow_dispatch:
     inputs:
@@ -85,7 +85,7 @@ jobs:
       - name: 开启新的下载任务
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: 谷歌云微软云单个1.yml
+          workflow: 谷歌云微软云单个2.yml
           ref: main
         
       - name: 删除旧的上传记录
