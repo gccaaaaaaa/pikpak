@@ -82,8 +82,14 @@ jobs:
         with:
           args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/${{ github.event.inputs.path }}/ >/dev/null 2>&1
 
-      - name: Delete workflow runs
-        uses: Mattraks/delete-workflow-runs@v1.2.3
+      - name: 开启新的下载任务
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: 谷歌云微软云单个1.yml
+          ref: main
+        
+      - name: 删除旧的上传记录
+        uses: Mattraks/delete-workflow-runs@v2
         with:
           token: ${{ github.token }}
           repository: ${{ github.repository }}
