@@ -1,11 +1,6 @@
 name: 谷歌云微软云单个pikpak转存
 on:
   workflow_dispatch:
-    inputs:
-      path:
-        description: '下载路径'
-        required: true
-        default: '二零二三年年十月二十五日三'
 
 jobs:
   pikpak:
@@ -36,7 +31,7 @@ jobs:
       - name: 'Download file from PikPak'
         run: |
           chmod a+x pikpakcli
-          ./pikpakcli download -c 5 -p ${{ github.event.inputs.path }} >/dev/null 2>&1
+          ./pikpakcli download -c 5 -p ${{ secrets.xiazaiwenjianjia1 }} >/dev/null 2>&1
 
       - name: install Python3.9
         uses: actions/setup-python@v2
@@ -54,7 +49,7 @@ jobs:
       - name: crypt file
         id: encrypt
         run: |
-           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ github.event.inputs.path }}' '${{ github.workspace }}/out/' >/dev/null 2>&1 encName
+           ${{ github.workspace }}/dist/nodejs-linux '${{ secrets.ALIST_ENCRYPT_PASSWORD }}' aesctr enc '${{ github.workspace }}/${{ secrets.xiazaiwenjianjia1 }}' '${{ github.workspace }}/out/' >/dev/null 2>&1 encName
            filename=$(ls out | head -n1) >/dev/null 2>&1
            sha1_s=`openssl sha1 out/$filename | awk '{ print $2 }'` >/dev/null 2>&1
            header="OC-Checksum:sha1:$sha1_s" >/dev/null 2>&1
@@ -66,26 +61,26 @@ jobs:
 
       - name: Delete actions folder1
         run: |
-         sudo rm -rf ${{ github.event.inputs.path }}/
+         sudo rm -rf ${{ secrets.xiazaiwenjianjia1 }}/
 
       - name: upload onedrive
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptonedrive:/${{ github.event.inputs.path }}/ >/dev/null 2>&1
+          args: copy out/ cryptonedrive:/${{ secrets.xiazaiwenjianjia1 }}/ >/dev/null 2>&1
 
       - name: 上传gd
         uses: wei/rclone@v1
         env:
           RCLONE_CONF: ${{ secrets.RCLONE_CONF }}
         with:
-          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/${{ github.event.inputs.path }}/ >/dev/null 2>&1
+          args: copy out/ cryptsajdshdjdgooglecloud:/${{ secrets.cloudname }}/${{ secrets.xiazaiwenjianjia1 }}/ >/dev/null 2>&1
 
       - name: 开启新的下载任务
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: 谷歌云微软云单个1.yml
+          workflow: 谷歌云微软云单个1111.yml
           ref: main
         
       - name: 删除旧的上传记录
